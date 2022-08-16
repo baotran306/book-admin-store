@@ -1,0 +1,11 @@
+.layout{
+    display: flex;
+}
+.layoutContainer{
+    flex: 6;
+}
+.layoutContainer .children{
+    display: flex;
+    padding: 20px;
+    gap: 20px;
+}

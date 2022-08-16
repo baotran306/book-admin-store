@@ -1,0 +1,6 @@
+.more-detail{
+    text-decoration: none;
+}
+.more-detail:hover{
+    text-decoration: underline;
+}

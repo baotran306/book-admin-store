@@ -1,0 +1,6 @@
+.view-detail a{
+    text-decoration: none;
+}
+.view-detail a:hover{
+    text-decoration: underline;
+}

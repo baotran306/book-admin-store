@@ -1,0 +1,6 @@
+.items{
+    padding-left: 1.4rem;
+}
+.items li{
+    display: flex;
+}
