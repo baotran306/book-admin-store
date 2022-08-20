@@ -1,4 +1,4 @@
-import { Search } from "@mui/icons-material";
+import { Cancel, Close, Done, RestartAlt, Search } from "@mui/icons-material";
 import {
     Table,
     TableBody,
@@ -15,47 +15,20 @@ import {
     InputLabel,
     FormControl
 } from "@mui/material";
-import React, { useState } from "react";
+import id from "date-fns/esm/locale/id/index.js";
+import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
+import Axios from "../../../../../Axios";
 import './Product.css';
 
 const Product = () => {
-    const initial = [{
-        id: 1, image: require('../../../../image/frame.png'), name: 'T-shirt blue strong', description: 'Size:XXL, Color: Blue, Material: cord-ton, gender: male', price: 10000, quantity_stock: 10, status: true, is_new: true
-    }, {
-        id: 2, image: require('../../../../image/frame.png'), name: 'T-shirt blue strong T-shirt blue strong T-shirt blue strong T-shirt blue strong', description: 'Size:XXL, Color: Blue, Material: cord-ton, gender: male', price: 10000, quantity_stock: 10, status: false, is_new: false
-    }, {
-        id: 3, image: require('../../../../image/frame.png'), name: 'T-shirt blue strong', description: 'Size:XXL, Color: Blue, Material: cord-ton, gender: male', price: 10000, quantity_stock: 10, status: true, is_new: false
-    }, {
-        id: 4, image: require('../../../../image/frame.png'), name: 'T-shirt blue strong', description: 'Size:XXL, Color: Blue, Material: cord-ton, gender: male', price: 10000, quantity_stock: 10, status: true, is_new: true
-    },
-    {
-        id: 5, image: require('../../../../image/frame.png'), name: 'T-shirt blue strong', description: 'Size:XXL, Color: Blue, Material: cord-ton, gender: male', price: 10000, quantity_stock: 10, status: true, is_new: true
-    },
-    {
-        id: 6, image: require('../../../../image/frame.png'), name: 'T-shirt blue strong', description: 'Size:XXL, Color: Blue, Material: cord-ton, gender: male', price: 10000, quantity_stock: 10, status: true, is_new: true
-    },
-    {
-        id: 7, image: require('../../../../image/frame.png'), name: 'T-shirt blue strong', description: 'Size:XXL, Color: Blue, Material: cord-ton, gender: male', price: 10000, quantity_stock: 10, status: true, is_new: true
-    },
-    {
-        id: 8, image: require('../../../../image/frame.png'), name: 'T-shirt blue strong', description: 'Size:XXL, Color: Blue, Material: cord-ton, gender: male', price: 10000, quantity_stock: 10, status: true, is_new: true
-    },
-    {
-        id: 9, image: require('../../../../image/frame.png'), name: 'T-shirt blue strong', description: 'Size:XXL, Color: Blue, Material: cord-ton, gender: male', price: 10000, quantity_stock: 10, status: true, is_new: true
-    },
-    {
-        id: 10, image: require('../../../../image/frame.png'), name: 'T-shirt blue strong', description: 'Size:XXL, Color: Blue, Material: cord-ton, gender: male', price: 10000, quantity_stock: 10, status: true, is_new: true
-    },
-    {
-        id: 11, image: require('../../../../image/frame.png'), name: 'T-shirt blue strong', description: 'Size:XXL, Color: Blue, Material: cord-ton, gender: male', price: 10000, quantity_stock: 10, status: true, is_new: true
-    }
-    ];
-    const [product, setProduct] = useState(initial);
-    const [selectNew, setSelectNew] = useState('');
+    const [product, setProduct] = useState([] as any);
+    const [selectNew, setSelectNew] = useState(-1);
     const navigate = useNavigate();
     const [page, setPage] = useState(0);
+    const [loading, setLoading] = useState(true);
     const [rowsPerPage, setRowsPerPage] = useState(10);
+    const [keyWord, setKeyWord] = useState('');
 
     const handleChangePage = (event: unknown, newPage: number) => {
         setPage(newPage);
@@ -70,33 +43,91 @@ const Product = () => {
         setPage(0);
     };
     const handleClickUpdate = (data: any) => {
-        navigate(`book/${data.id}`);
+        navigate(`book/${data.isbn}`);
     }
     const handleClickNewProduct = () => {
         navigate(`book`)
     }
+    useEffect(() => {
+        if (loading) {
+            loadData();
+        }
+    }, [loading]);
+    const loadData = () => {
+        Axios.get(`/book/get-list-book`)
+            .then(res => {
+                setProduct(res.data);
+                setLoading(false);
+            }).catch((error) => {
+                console.log(error);
+
+            })
+    }
+    const handleReload = () => {
+        setLoading(true);
+        setSelectNew(-1);
+        setKeyWord('');
+    }
+    const handleSearch = () => {
+        if (selectNew !== -1) {
+            searchIsNew()
+        } else if (keyWord !== '') {
+            search();
+        } else if (keyWord === '' && selectNew === -1) {
+            setLoading(true);
+        }
+    }
+    const search = () => {
+        Axios.post(`/book/get-list-book-by-name`, {
+            bookName: keyWord
+        }).then(res => {
+            setProduct(res.data);
+        }).catch((error) => {
+
+        })
+    }
+    const searchIsNew = () => {
+        Axios.post(`/book/get-list-book-by-name-and-is-new`, {
+            bookName: keyWord,
+            is_new: selectNew
+        }).then(res => {
+            setProduct(res.data);
+        }).catch((error) => {
+
+        })
+    }
+    const handleChangeKeyWord = (event: any) => {
+        setKeyWord(event.target.value)
+    }
     return (
         <div className="container" >
             <Paper sx={{ width: '100%', overflow: 'hidden' }}>
-                <TableContainer sx={{ maxHeight: 600 }}>
+                <TableContainer sx={{ maxHeight: 800 }}>
                     <Table aria-label="simple-label">
                         <TableHead>
                             <TableRow>
-                                <TableCell colSpan={6}>
+                                <TableCell colSpan={5}>
                                     <div className="screen-search-product">
-                                        <TextField label='Tìm kiếm' sx={{ width: '300px' }} />
+                                        <TextField label='Lọc danh mục' name="keyword"
+                                            value={keyWord}
+                                            onChange={handleChangeKeyWord}
+                                            sx={{ width: '300px' }} />
                                         <FormControl sx={{ width: '200px' }}>
-                                            <InputLabel id='select-new'>Select new</InputLabel>
+                                            <InputLabel id='select-new'>Lọc danh mục</InputLabel>
                                             <Select
                                                 labelId="select-new"
-                                                defaultValue={selectNew}
+                                                value={selectNew}
                                                 onChange={handleChangeSelect}
-                                                label={'Select new'}>
-                                                <MenuItem value={0}>Old</MenuItem>
-                                                <MenuItem value={1}>New</MenuItem>
+
+                                                label={'Lọc danh mục'}>
+                                                <MenuItem value={-1}>None</MenuItem>
+                                                <MenuItem value={0}>Cũ</MenuItem>
+                                                <MenuItem value={1}>Mới</MenuItem>
                                             </Select>
+
                                         </FormControl>
-                                        <Button variant="outlined"><Search /></Button>
+                                        <Button variant="outlined" onClick={handleSearch}><Search /></Button>
+                                        <Button variant="outlined" onClick={handleReload}><RestartAlt /></Button>
                                     </div>
                                 </TableCell>
                                 <TableCell>
@@ -105,8 +136,7 @@ const Product = () => {
                             </TableRow>
                             <TableRow>
                                 <TableCell sx={{ width: '5%', textAlign: 'center' }}>STT</TableCell>
-                                <TableCell sx={{ width: '30%', textAlign: 'center' }}>Sách</TableCell>
-                                <TableCell sx={{ width: '25%', textAlign: 'center' }}>Mô tả</TableCell>
+                                <TableCell sx={{ width: '55%', textAlign: 'center' }}>Sách</TableCell>
                                 <TableCell sx={{ width: '10%', textAlign: 'center' }}>Tồn kho</TableCell>
                                 <TableCell sx={{ width: '10%', textAlign: 'center' }}>Giá</TableCell>
                                 <TableCell sx={{ width: '10%', textAlign: 'center' }}>Mới</TableCell>
@@ -116,28 +146,25 @@ const Product = () => {
                         <TableBody>
                             {product
                                 .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
-                                .map((data, index: number) => (
+                                .map((data: any, index: number) => (
                                     <TableRow key={data.id}>
                                         <TableCell sx={{ verticalAlign: 'middle', textAlign: 'center' }}>
                                             {page * rowsPerPage + index + 1}
                                         </TableCell>
                                         <TableCell sx={{ verticalAlign: 'middle', display: 'flex', gap: '5px' }}>
                                             <div>
-                                                <img style={{ width: '80px', height: '100px' }} src={data.image} alt='' />
+                                                <img style={{ width: '80px', height: '100px' }} src={`http://127.0.0.1:5000/get-image/${data.image}`} alt='' />
                                             </div>
                                             <div style={{ width: '100%', display: 'table' }}>
                                                 <span style={{ height: 'auto', display: 'table-cell', verticalAlign: 'middle' }}>
-                                                    {data.name}
+                                                    {data.book_name}
                                                 </span>
                                             </div>
-                                        </TableCell>
-                                        <TableCell sx={{ verticalAlign: 'middle' }}>
-                                            {data.description}
                                         </TableCell>
                                         <TableCell sx={{
                                             verticalAlign: 'middle', textAlign: 'center',
                                         }}>
-                                            {data.quantity_stock}
+                                            {data.quantity_in_stock}
                                         </TableCell>
                                         <TableCell sx={{
                                             verticalAlign: 'middle', textAlign: 'center', '::after': {
@@ -147,16 +174,16 @@ const Product = () => {
                                             {Intl.NumberFormat().format(data.price)}
                                         </TableCell>
                                         <TableCell sx={{ verticalAlign: 'middle', textAlign: 'center' }}>
-                                            {data.is_new === true ? 'Yes' : 'No'}
+                                            {data.is_new === true ? <Done sx={{ color: 'green' }} /> : <Close sx={{ color: 'red' }} />}
                                         </TableCell>
                                         <TableCell sx={{ verticalAlign: 'middle' }}>
                                             <div style={{ height: '100px', display: 'table' }}>
                                                 <div style={{ display: 'table-cell', verticalAlign: 'middle', paddingRight: '5px' }}>
                                                     <Button sx={{ width: '110px' }} variant="outlined" onClick={() => handleClickUpdate(data)}>Cập Nhật</Button>
                                                 </div>
-                                                <div style={{ display: 'table-cell', verticalAlign: 'middle' }}>
+                                                {/* <div style={{ display: 'table-cell', verticalAlign: 'middle' }}>
                                                     {data.status ? <Button sx={{ width: '100px' }} variant="outlined">Tắt</Button> : <Button sx={{ width: '100px' }} variant="outlined">Mở</Button>}
-                                                </div>
+                                                </div> */}
                                             </div>
                                         </TableCell>
                                     </TableRow>

@@ -4,18 +4,39 @@ import { Button, FormControl, FormHelperText } from "@mui/material";
 import { Visibility, VisibilityOff } from '@mui/icons-material';
 import './Login.css';
 import { useNavigate } from "react-router-dom";
+import Axios from "../../../Axios";
 
 const Login = (props: any) => {
+    const initialUser = { account: "", password: "" };
+    const [user, setUser] = useState(initialUser);
     const [showMessageError, setShowMessageError] = useState(false);
+    const [messageError, setMessageError] = useState(false);
     const [hiddenPassword, setHiddenPassword] = useState(true);
     const navigate = useNavigate();
     const handleClickLogin = () => {
-        setShowMessageError(!showMessageError);
-        sessionStorage.setItem('accessToken', 'true');
-        navigate('/');
+        login();
     }
     const handleClickHidden = () => {
         setHiddenPassword(!hiddenPassword);
+    }
+    const login = () => {
+        Axios.post('/staff/login', {
+            account: user.account,
+            password: user.password
+        }).then(res => {
+            let info = res.data;
+            console.log(info.info[0]);
+
+            sessionStorage.setItem('accessToken', JSON.stringify(info.info[0]));
+            if (res.data.result)
+                navigate('/');
+        }).catch(error => {
+            setMessageError(error.response.data.message);
+            setShowMessageError(true);
+        })
+    }
+    const handleChange = (event: any) => {
+        setUser({ ...user, [event.target.name]: event.target.value });
     }
     return (
         <div className="container-login">
@@ -28,19 +49,25 @@ const Login = (props: any) => {
                             <FormControl fullWidth>
                                 <TextField
                                     error={showMessageError}
+                                    name="account"
+                                    value={user.account}
+                                    onChange={handleChange}
                                     label="username" />
                             </FormControl>
                             <FormControl className="password-container">
                                 <TextField
                                     error={showMessageError}
                                     type={hiddenPassword ? 'password' : 'text'}
+                                    name="password"
+                                    value={user.password}
+                                    onChange={handleChange}
                                     label="password"
                                 />
                                 {hiddenPassword ? <Visibility className="icon-password" onClick={handleClickHidden} />
                                     : <VisibilityOff className="icon-password" onClick={handleClickHidden} />}
                             </FormControl>
                             {showMessageError ? <FormControl error variant="standard">
-                                <FormHelperText id="component-error-text">username or password is incorrect</FormHelperText>
+                                <FormHelperText id="component-error-text">{messageError}</FormHelperText>
                             </FormControl> : <></>}
 
                             <div className="forget-password">

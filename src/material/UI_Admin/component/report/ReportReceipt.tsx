@@ -128,8 +128,9 @@ const ReportReceipt = () => {
                             </tr>
                             <tr style={{ display: 'flex', justifyContent: 'right' }}>
                                 <div style={{ display: 'flex', flexDirection: 'column' }}>
-                                    <span style={{ textAlign: 'center', marginBottom: '60px' }}>Ngày: {moment(new Date()).format('DD/MM/YYYY')}, Nhân viên lập</span>
-                                    <span style={{ textAlign: 'right' }}>Trần Quốc Bảo</span>
+                                    <span style={{ textAlign: 'center' }}>Ngày: {moment(new Date()).format('DD/MM/YYYY')}</span>
+                                    <span style={{ textAlign: 'center', marginBottom: '60px' }}>Nhân viên lập</span>
+                                    <span style={{ textAlign: 'center' }}>{JSON.parse(sessionStorage.getItem("accessToken")!).last_name + " " + JSON.parse(sessionStorage.getItem("accessToken")!).first_name}</span>
                                 </div>
                             </tr>
                         </tbody>

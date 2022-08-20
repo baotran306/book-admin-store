@@ -41,13 +41,8 @@
 .container .reportRevenueContainer .reportRevenueFooter{
     display: flex;
     justify-content: right;
-    flex-direction: column;
 }
-.container .reportRevenueContainer .reportRevenueFooter span{
-    display: flex;
-    justify-content: right;
-    padding-right: 10px;
-}
+
 .container .reportRevenueContainer .reportRevenueFooter .gap-name{
     gap:100px;
     margin-bottom: 60px;

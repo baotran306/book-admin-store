@@ -206,8 +206,17 @@ export default function TableOrder(props: any) {
             <TablePagination
                 rowsPerPageOptions={[10, 25, 100]}
                 component="div"
+                sx={{
+                    div: {
+                        '.css-pdct74-MuiTablePagination-selectLabel, .css-levciy-MuiTablePagination-displayedRows': {
+                            marginTop: '15px',
+                        }
+                    }
+                }}
                 count={listOrderCustomer.length}
                 rowsPerPage={rowsPerPage}
+                labelDisplayedRows={function defaultLabelDisplayedRows({ from, to, count }) { return `${from}–${to} trong ${count !== -1 ? count : `more than ${to}`}`; }}
+                labelRowsPerPage={'Trang: '}
                 page={page}
                 onPageChange={handleChangePage}
                 onRowsPerPageChange={handleChangeRowsPerPage}

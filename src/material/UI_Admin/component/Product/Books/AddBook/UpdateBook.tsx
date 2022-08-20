@@ -15,6 +15,7 @@ import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 import { useNavigate, useParams } from "react-router-dom";
 import moment from "moment";
 import Axios from "../../../../../Axios";
+import { image } from "html2canvas/dist/types/css/types/image";
 
 const Books = () => {
     const { id_book } = useParams();
@@ -26,13 +27,14 @@ const Books = () => {
         pages: "",
         price: "",
         release_year: "",
-        quantity: "",
+        quantity_in_stock: "",
         book_type_id: '',
         is_new: true,
         publisher_id: ''
     }
 
     const [book, setBook] = useState(initital);
+    const [loading, setLoading] = useState(false);
     const [publisher, setPublisher] = useState([] as any);
     const [bookType, setBookType] = useState([] as any);
     const [searchBrand, setSearchBrand] = useState('');
@@ -62,20 +64,38 @@ const Books = () => {
         // })
     }
     useEffect(() => {
-        Axios.get('/book/get-list-publisher')
-            .then(res => {
-                setPublisher(res.data);
-            }).catch(error => {
-                console.log(error);
-            });
+        if (loading) {
+            Axios.get('/book/get-list-publisher')
+                .then(res => {
+                    setPublisher(res.data);
+                    console.log(res.data);
+                }).catch(error => {
+                    console.log(error);
+                });
 
-        Axios.get('/book/get-list-book-type')
-            .then(res => {
-                setBookType(res.data);
-            }).catch(error => {
-                console.log(error);
-            })
-    }, []);
+            Axios.get('/book/get-list-book-type')
+                .then(res => {
+                    setBookType(res.data);
+                }).catch(error => {
+                    console.log(error);
+                })
+            setLoading(false);
+        }
+    }, [loading]);
+    useEffect(() => {
+        if (id_book) {
+            Axios.get(`/book/get-list-book-by-id/${id_book}`)
+                .then(res => {
+                    console.log(res.data[0]);
+                    setBook(res.data[0]);
+                    setLoading(true);
+                }).catch(error => {
+
+                })
+        } else {
+            setLoading(true);
+        }
+    }, [])
     const handleCancel = () => {
         navigate(-1);
     }
@@ -87,7 +107,7 @@ const Books = () => {
             pages: book.pages,
             price: book.price,
             release_year: book.release_year,
-            quantity: book.quantity,
+            quantity: book.quantity_in_stock,
             book_type_id: book.book_type_id,
             is_new: true,
             publisher_id: book.publisher_id
@@ -101,6 +121,22 @@ const Books = () => {
         const name = e.target.name;
         const value = e.target.value;
         setBook({ ...book, [name]: value });
+    }
+    const handleFilterPublisher = () => {
+        for (var data in publisher) {
+            if (publisher[data].publisher_id === book.publisher_id) {
+                return publisher[data];
+            }
+        }
+        return null;
+    }
+    const handleFilterBookType = () => {
+        for (var data in bookType) {
+            if (bookType[data].book_type_id === book.book_type_id) {
+                return bookType[data];
+            }
+        }
+        return null;
     }
     return (
         <div className="container">
@@ -185,7 +221,7 @@ const Books = () => {
                                 <Autocomplete
                                     disablePortal
                                     id="pushlisher"
-                                    value={publisher.find((data: any) => data.publisher_id === book.publisher_id)}
+                                    value={handleFilterPublisher()}
                                     options={publisher}
                                     onChange={(event, value: any) => {
                                         setBook({ ...book, publisher_id: value?.publisher_id });
@@ -202,7 +238,7 @@ const Books = () => {
                                     disablePortal
                                     id="bookType"
                                     options={bookType}
-                                    value={bookType.find((data: any) => data.book_type_id === book.book_type_id)}
+                                    value={handleFilterBookType()}
                                     onChange={(event, value: any) => {
                                         alert(JSON.stringify(value));
                                         setBook({ ...book, book_type_id: value?.book_type_id });
@@ -224,17 +260,18 @@ const Books = () => {
                                     className={'form-control'} />
                             </div>
                         </div>
-                        <div className="container-input">
+                        {!id_book ? <div className="container-input">
                             <div className="bottom">
                                 <TextField
                                     label={'Số lượng *'}
                                     type={'number'}
                                     name={'quantity'}
-                                    value={book.quantity}
+                                    value={book.quantity_in_stock}
                                     onChange={handleChange}
                                     className={'form-control'} />
                             </div>
-                        </div>
+                        </div> : <></>}
+
                         {id_book ? <div className="container-input">
                             <div className="bottom">
                                 <FormControlLabel
@@ -261,8 +298,9 @@ const Books = () => {
                     <div className="right">
                         <div className="imageContainer">
                             <div className="image">
-                                {img ?
-                                    <img src={img} alt="" /> : <img src={require('../../../../image/frame.png')} alt=''></img>}
+                                {id_book ? <img src={`http://127.0.0.1:5000/get-image/${book.image}`} alt="" />
+                                    : img ? <img src={img} alt='' />
+                                        : <img src={require('../../../../image/frame.png')} alt='' />}
                             </div>
                         </div>
                         <div className="btnContainer">

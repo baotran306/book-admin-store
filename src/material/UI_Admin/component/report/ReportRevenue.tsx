@@ -12,6 +12,7 @@ import Axios from "../../../Axios";
 const ReportRevenue = () => {
     const [valueFromDate, setValueFromDate] = useState('');
     const [valueToDate, setValueToDate] = useState('');
+    const [printer, setPrinter] = useState('');
     const [showReport, setShowReport] = useState(false);
     const [reportRevenueValue, setReportRevenueValue] = useState([]);
     const [sumRevenue, setSumRevenue] = useState(0);
@@ -56,6 +57,8 @@ const ReportRevenue = () => {
                 console.log(res.data);
                 setReportRevenueValue(res.data.info.stats)
                 setSumRevenue(res.data.info.sum_all)
+                let infoUser = JSON.parse(sessionStorage.getItem("accessToken")!);
+                setPrinter(infoUser.last_name + " " + infoUser.first_name);
             })
             .catch((error) => console.log(error))
     }
@@ -115,11 +118,10 @@ const ReportRevenue = () => {
                                 </tbody>
                             </Table>
                             <div className="reportRevenueFooter">
-                                <div className="gap-name">
-                                    <span>Ngày: {moment(new Date()).format('DD/MM/YYYY')}, Nhân viên lập biểu</span>
-                                </div>
-                                <div>
-                                    <span>Trần Quốc Bảo</span>
+                                <div style={{ display: 'flex', flexDirection: 'column' }}>
+                                    <span>Ngày: {moment(new Date()).format('DD/MM/YYYY')}</span>
+                                    <span>Nhân viên lập biểu</span>
+                                    <span style={{ marginTop: '60px', textAlign: 'center' }}>{printer}</span>
                                 </div>
                             </div>
                         </div>
