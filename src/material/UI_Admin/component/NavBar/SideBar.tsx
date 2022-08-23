@@ -22,6 +22,7 @@ const SideBar = () => {
     const handleClickDropDownProduct = () => {
         setDropdownProduct(!dropdownProduct);
     }
+    const role = JSON.parse(sessionStorage.getItem("accessToken")!).role_id;
     useEffect(() => {
         for (var i = 0; i < item.length; i++) {
             item[i].addEventListener('click', function () {
@@ -43,35 +44,41 @@ const SideBar = () => {
             <hr />
             <div className='center'>
                 <ul>
-                    <p className='title'>Trang chủ</p>
-                    <li className='active'>
-                        <Dashboard className='icon' />
-                        <span>Thống kê</span>
-                    </li>
-                    <p className='title'>Danh sách chỉ mục</p>
-                    <li>
-                        <PersonOutlineOutlined className='icon' />
-                        <span>Nhân viên</span>
-                    </li>
-                    <li onClick={handleClickDropDownProduct}>
-                        <Store className='icon' />
-                        <span>Sản phẩm</span>
-                        {dropdownProduct ? <ArrowDropUp className='icon dropdown-icon' /> : <ArrowDropDown className='icon dropdown-icon' />}
-                    </li>
-                    {dropdownProduct ? <Dropdown /> : <></>}
-                    <li onClick={() => navigate("/order")}>
-                        <CreditCard className='icon' />
-                        <span>Đơn đặt hàng</span>
-                    </li>
-                    <li onClick={() => navigate('/delivery')}>
-                        <LocalShipping className='icon' />
-                        <span>Vận chuyển</span>
-                    </li>
-                    <p className='title'>Báo cáo</p>
-                    <li onClick={() => navigate("/report")}>
-                        <Summarize className='icon' />
-                        <span>Báo cáo</span>
-                    </li>
+                    {role !== 3 && <>
+                        <p className='title'>Trang chủ</p>
+                        <li className='active'>
+                            <Dashboard className='icon' />
+                            <span>Thống kê</span>
+                        </li>
+                        <p className='title'>Danh sách chỉ mục</p>
+                        <li>
+                            <PersonOutlineOutlined className='icon' />
+                            <span>Nhân viên</span>
+                        </li>
+                        <li onClick={handleClickDropDownProduct}>
+                            <Store className='icon' />
+                            <span>Sản phẩm</span>
+                            {dropdownProduct ? <ArrowDropUp className='icon dropdown-icon' /> : <ArrowDropDown className='icon dropdown-icon' />}
+                        </li>
+                        {dropdownProduct ? <Dropdown /> : <></>}
+                        <li onClick={() => navigate("/order")}>
+                            <CreditCard className='icon' />
+                            <span>Đơn đặt hàng</span>
+                        </li>
+                    </>}
+                    {role === 3 && <>
+                        <p className='title'>Giao hàng</p>
+                        <li onClick={() => navigate('/delivery')}>
+                            <LocalShipping className='icon' />
+                            <span>Vận chuyển</span>
+                        </li>
+                    </>}
+                    {role !== 3 && <>
+                        <p className='title'>Báo cáo</p>
+                        <li onClick={() => navigate("/report")}>
+                            <Summarize className='icon' />
+                            <span>Báo cáo</span>
+                        </li></>}
                     <p className='title'>Người dùng</p>
                     <li>
                         <AccountCircleOutlined className='icon' />

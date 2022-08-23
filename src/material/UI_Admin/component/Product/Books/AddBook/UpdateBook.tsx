@@ -27,7 +27,7 @@ const Books = () => {
         pages: "",
         price: "",
         release_year: "",
-        quantity_in_stock: "",
+        quantity_in_stock: 0,
         book_type_id: '',
         is_new: true,
         publisher_id: ''
@@ -49,7 +49,8 @@ const Books = () => {
         reader.onload = () => {
             if (reader.readyState === 2) {
                 setImg(reader.result);
-                setBook({ ...book, image: e.target.files[0].name })
+                console.log(reader.result);
+                setBook({ ...book, image: Date.now() + e.target.files[0].name })
             }
         }
         reader.readAsDataURL(e.target.files[0])
@@ -112,6 +113,16 @@ const Books = () => {
             is_new: true,
             publisher_id: book.publisher_id
         }).then((res) => {
+            console.log(img);
+            Axios.post("/download-image", {
+                image: book.image,
+                file: img
+            }).then((res) => {
+                // navigate(-1);
+                alert(1);
+            }).catch(eror => {
+                alert(2);
+            })
             navigate(-1);
         }).catch(eror => {
 
@@ -240,7 +251,7 @@ const Books = () => {
                                     options={bookType}
                                     value={handleFilterBookType()}
                                     onChange={(event, value: any) => {
-                                        alert(JSON.stringify(value));
+                                        // alert(JSON.stringify(value));
                                         setBook({ ...book, book_type_id: value?.book_type_id });
                                     }}
                                     getOptionLabel={(option) => option.book_type_name}
@@ -265,7 +276,7 @@ const Books = () => {
                                 <TextField
                                     label={'Số lượng *'}
                                     type={'number'}
-                                    name={'quantity'}
+                                    name={'quantity_in_stock'}
                                     value={book.quantity_in_stock}
                                     onChange={handleChange}
                                     className={'form-control'} />

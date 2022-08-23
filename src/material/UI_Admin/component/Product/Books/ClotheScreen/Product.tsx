@@ -108,12 +108,12 @@ const Product = () => {
                             <TableRow>
                                 <TableCell colSpan={5}>
                                     <div className="screen-search-product">
-                                        <TextField label='Lọc danh mục' name="keyword"
+                                        <TextField label='Tìm kiếm theo tên sách...' name="keyword"
                                             value={keyWord}
                                             onChange={handleChangeKeyWord}
                                             sx={{ width: '300px' }} />
                                         <FormControl sx={{ width: '200px' }}>
-                                            <InputLabel id='select-new'>Lọc danh mục</InputLabel>
+                                            <InputLabel id='select-new'>Lọc trạng thái</InputLabel>
                                             <Select
                                                 labelId="select-new"
                                                 value={selectNew}

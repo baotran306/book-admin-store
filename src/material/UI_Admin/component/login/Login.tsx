@@ -26,10 +26,14 @@ const Login = (props: any) => {
         }).then(res => {
             let info = res.data;
             console.log(info.info[0]);
-
             sessionStorage.setItem('accessToken', JSON.stringify(info.info[0]));
-            if (res.data.result)
-                navigate('/');
+            props.setRole(info.info[0].role_id)
+            if (info.info[0].role_id === 3) {
+                navigate('/delivery');
+            } else {
+                if (res.data.result && info.info[0].role_id !== 3)
+                    navigate('/');
+            }
         }).catch(error => {
             setMessageError(error.response.data.message);
             setShowMessageError(true);
@@ -45,7 +49,7 @@ const Login = (props: any) => {
                     <div className="left"></div>
                     <div className="right">
                         <div className="display-main-login">
-                            <div className="title">Login</div>
+                            <div className="title">Đăng nhập</div>
                             <FormControl fullWidth>
                                 <TextField
                                     error={showMessageError}
@@ -71,12 +75,12 @@ const Login = (props: any) => {
                             </FormControl> : <></>}
 
                             <div className="forget-password">
-                                <span>Forget password</span>
+                                <span>Quên mật khẩu</span>
                             </div>
                             <div className="btn-login">
                                 <Button sx={{ width: '300px', height: '50px', borderRadius: '25px' }}
                                     onClick={handleClickLogin}
-                                    variant="outlined">Login</Button>
+                                    variant="outlined">Đăng nhập</Button>
                             </div>
                         </div>
                     </div>
