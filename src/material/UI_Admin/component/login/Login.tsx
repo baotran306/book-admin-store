@@ -32,7 +32,7 @@ const Login = (props: any) => {
                 navigate('/delivery');
             } else {
                 if (res.data.result && info.info[0].role_id !== 3)
-                    navigate('/');
+                    navigate('/order');
             }
         }).catch(error => {
             setMessageError(error.response.data.message);

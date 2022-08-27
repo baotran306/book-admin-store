@@ -29,12 +29,12 @@ const Dropdown = () => {
                 <li>
                     <Discount className="icon" />
                     <span>Discount</span>
-                </li>
-                <li>
+                </li> */}
+                <li onClick={() => redirect('/category')}>
                     <Bookmarks className="icon" />
-                    <span>Label</span>
+                    <span>Thể loại</span>
                 </li>
-                <li>
+                {/* <li>
                     <AllInclusive className="icon" />
                     <span>Material</span>
                 </li> */}

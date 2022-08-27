@@ -15,7 +15,6 @@ import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 import { useNavigate, useParams } from "react-router-dom";
 import moment from "moment";
 import Axios from "../../../../../Axios";
-import { image } from "html2canvas/dist/types/css/types/image";
 
 const Books = () => {
     const { id_book } = useParams();
@@ -56,13 +55,33 @@ const Books = () => {
         reader.readAsDataURL(e.target.files[0])
     }
     const handleSave = () => {
-        // Axios.post("/book/insert-book", {
-        //     book
-        // }).then((res) => {
-        //     navigate(-1);
-        // }).catch(eror => {
+        Axios.post("/book/update-book", {
+            isbn: book.isbn,
+            book_name: book.book_name,
+            image: book.image,
+            pages: book.pages,
+            price: book.price,
+            release_year: book.release_year,
+            quantity: book.quantity_in_stock,
+            book_type_id: book.book_type_id,
+            is_new: book.is_new,
+            publisher_id: book.publisher_id
+        }).then((res) => {
+            console.log('aa');
+            console.log(img);
+            Axios.post("/download-image", {
+                image: book.image,
+                file: img
+            }).then((res) => {
+                // navigate(-1);
+                alert(1);
+            }).catch(eror => {
+                alert(2);
+            })
+            navigate(-1);
+        }).catch(eror => {
 
-        // })
+        })
     }
     useEffect(() => {
         if (loading) {
@@ -166,6 +185,7 @@ const Books = () => {
                                     value={book.isbn}
                                     label={'Mã ISBN *'}
                                     name={'isbn'}
+                                    disabled={id_book ? true : false}
                                     onChange={handleChange}
                                     className={'form-control'} />
                             </div>
@@ -180,7 +200,7 @@ const Books = () => {
                                     className={'form-control'} />
                             </div>
                         </div>
-                        <div className="container-input">
+                        {/* <div className="container-input">
                             <div className="top">
                                 <label>Mô tả <span>*</span></label>
                             </div>
@@ -203,7 +223,7 @@ const Books = () => {
                                     }}
                                 />
                             </div>
-                        </div>
+                        </div> */}
                         {/* <div className="container-input">
                             <div className="bottom">
                                 <TextField

@@ -10,7 +10,9 @@ import ReportRevenue from "../component/report/ReportRevenue";
 import ReportReceipt from "../component/report/ReportReceipt";
 import Delivery from "../component/delivery/Delivery";
 import Login from "../component/login/Login";
-import Product from "../component/Product/Books/ClotheScreen/Product";
+import Product from "../component/Product/Books/BookScreen/Product";
+import Category from "../component/Product/Books/CategoryScreen/Category";
+import CategoryDetail from "../component/Product/Books/AddCategory/UpdateCategory";
 export const grantPermission = (requestedRoles: any) => {
     const permittedRoles = JSON.parse(localStorage.getItem('accessToken')!).role_id;
     // in case of multiple roles, if one of the permittedRoles is present in requestedRoles, return true;
@@ -37,7 +39,10 @@ const Main = () => {
                 <Route index element={<Home />} />
                 <Route path="product" element={<Product />} />
                 <Route path="product/book" element={<Book />} />
+                <Route path="category" element={<Category />} />
+                <Route path="category/update" element={<CategoryDetail />} />
                 <Route path="product/book/:id_book" element={<Book />} />
+                <Route path="category/update/:id_book_type" element={<CategoryDetail />} />
                 <Route path="order" element={<Order />} />
                 <Route path="order/order-detail/:cart_id" element={<OrderDetail />} />
                 <Route path="report" element={<ReportRevenue />} />

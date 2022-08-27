@@ -68,7 +68,7 @@ const ReportReceipt = () => {
                                 <td colSpan={5}>
                                     <table className='table table-borderless'>
                                         <tbody>
-                                            <tr><td colSpan={5} style={{ textAlign: 'center', fontWeight: '600', fontSize: '24px' }}><span>Hóa đơn</span></td></tr>
+                                            <tr><td colSpan={5} style={{ textAlign: 'center', fontWeight: '600', fontSize: '24px' }}><span>Hóa đơn cửa hàng sách Quốc Bảo</span></td></tr>
                                             <tr style={{ display: 'flex', flexDirection: 'row', justifyContent: 'space-between' }}>
                                                 <td>
                                                     <tr style={{ display: 'flex' }}><h6 style={{ paddingRight: '5px' }}>Mã hóa đơn:</h6><span>{billDetail.receiver_info.cart_id}</span></tr>
