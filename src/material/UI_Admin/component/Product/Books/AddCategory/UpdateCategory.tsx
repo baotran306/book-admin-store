@@ -22,7 +22,7 @@ const CategoryDetail = () => {
     const [book, setBook] = useState(initital);
     const [loading, setLoading] = useState(false);
     const handleSave = () => {
-        Axios.post("/book/insert-book-type", {
+        Axios.post("/book/update-book-type", {
             book_type_id: book.book_type_id,
             book_type_name: book.book_type_name
         }).then((res) => {

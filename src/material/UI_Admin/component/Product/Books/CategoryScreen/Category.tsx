@@ -85,7 +85,7 @@ const Category = () => {
                             <TableRow>
                                 <TableCell colSpan={3}>
                                     <div className="screen-search-product">
-                                        <TextField label='Tìm kiếm theo tên sách...' name="keyword"
+                                        <TextField label='Tìm kiếm theo tên thể loại...' name="keyword"
                                             value={keyWord}
                                             onChange={handleChangeKeyWord}
                                             sx={{ width: '300px' }} />
