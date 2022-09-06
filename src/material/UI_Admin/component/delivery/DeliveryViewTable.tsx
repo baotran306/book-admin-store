@@ -82,10 +82,10 @@ const DeliverView = (props: any) => {
                                 <TableCell sx={{ width: '10%', textAlign: 'center' }}>Mã đơn hàng</TableCell>
                                 <TableCell sx={{ width: '10%', textAlign: 'center' }}>Ngày đặt</TableCell>
                                 <TableCell sx={{ width: '15%', textAlign: 'center' }}>Tên khách hàng</TableCell>
-                                <TableCell sx={{ width: '30%', textAlign: 'center' }}>Địa chỉ</TableCell>
+                                <TableCell sx={{ width: '40%', textAlign: 'center' }}>Địa chỉ</TableCell>
                                 <TableCell sx={{ width: '10%', textAlign: 'center' }}>Số điện thoại</TableCell>
                                 <TableCell sx={{ width: '15%', textAlign: 'center' }}>Hành động</TableCell>
-                                <TableCell sx={{ width: '10%', textAlign: 'center' }}></TableCell>
+                                {/* <TableCell sx={{ width: '10%', textAlign: 'center' }}></TableCell> */}
                             </TableRow>
                         </TableHead>
                         <TableBody>
@@ -116,9 +116,9 @@ const DeliverView = (props: any) => {
                                             <TableCell sx={{ verticalAlign: 'middle', textAlign: 'center' }}>
                                                 {data.status_id !== 3 ? <Button sx={{ width: 'auto' }} variant="outlined" onClick={() => handleClickConfirm(data)}>Hoàn tất</Button> : <></>}
                                             </TableCell>
-                                            <TableCell sx={{ verticalAlign: 'middle' }}>
+                                            {/* <TableCell sx={{ verticalAlign: 'middle' }}>
                                                 <Link className="more-detail" to={`order/order-detail/${data.cart_id}`}>Chi tiết....</Link>
-                                            </TableCell>
+                                            </TableCell> */}
                                         </TableRow> : <></>
                                 ))}
                         </TableBody>

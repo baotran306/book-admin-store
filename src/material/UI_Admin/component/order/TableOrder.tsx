@@ -74,14 +74,14 @@ export default function TableOrder(props: any) {
     };
     const getApiByState = (status_id: any) => {
         console.log(status_id);
-        Axios.get(`/staff/get-customer-order-by-status/${status_id}`) // lay don hang theo state
+        Axios.get(`/staff/get-customer-order-by-status/${status_id}`)
             .then(res => {
                 let billTemp = res.data;
                 setListOrderCustomer(billTemp.map((data: any) => {
                     return {
                         customer_name: data.receiver_info.last_name_customer + " " + data.receiver_info.first_name_customer,
                         cart_id: data.receiver_info.cart_id,
-                        shipper: data.receiver_info.staff_id_delivery ? data.receiver_info.staff_id_delivery : 0, // ok, thees load duoc chua// ,đc r á thuwrt đi,
+                        shipper: data.receiver_info.staff_id_delivery ? data.receiver_info.staff_id_delivery : '',
                         date: moment(data.receiver_info.order_cart_time).format('hh:mm:ss, DD/MM/YYYY')
                     }
                 }))
@@ -96,7 +96,7 @@ export default function TableOrder(props: any) {
                 console.log(shipperTemp);
                 setListShipper(shipperTemp.map((data: any) => {
                     return {
-                        value: data.customer_id, // id_staff value cua m la cai nay phai ko the um
+                        value: data.customer_id,
                         full_name: data.last_name + " " + data.first_name,
                         number_delivery: data.number_delivery
                     }
@@ -104,16 +104,21 @@ export default function TableOrder(props: any) {
             })
     }
     const handlAccept = (data: any) => {
-        Axios.post(`/staff/update-cart`, { // này ko có reject :v, ý là có shipper r thì ko cho bấm 2 cái nutsok á
-            cart_id: data.cart_id,
-            status_id: 2,
-            staff_id_confirm: 'STAFF_1', // dang nhap vao sẽ có, u, chua dang nhap nen set cung tam
-            staff_id_delivery: data.shipper, // ko :v y
-        })
-            .then(res => {
-                setLoadData(!loadData);
+        if (data.shipper !== '' && data.shipper !== null) {
+            Axios.post(`/staff/update-cart`, {
+                cart_id: data.cart_id,
+                status_id: 2,
+                staff_id_confirm: JSON.parse(sessionStorage.getItem("accessToken")!).staff_id,
+                staff_id_delivery: data.shipper,
             })
-            .catch((error) => console.log(error))
+                .then(res => {
+                    setLoadData(!loadData);
+                })
+                .catch((error) => console.log(error))
+        } else {
+            alert(`Vui lòng chọn nhân viên giao hàng cho đơn hàng số ${data.cart_id} trước khi xác nhận`)
+        }
+
     }
     const handlReject = (data: any) => {
 
@@ -171,7 +176,7 @@ export default function TableOrder(props: any) {
                                                                     }));
                                                                 }}
                                                             >
-                                                                <MenuItem value={0}>chưa có</MenuItem>
+                                                                <MenuItem value={""}>chưa có</MenuItem>
                                                                 {listShipper.map(data => <MenuItem value={data.value}>{data.full_name + " | " + data.number_delivery}</MenuItem>)}
                                                             </Select>
                                                         </FormControl>

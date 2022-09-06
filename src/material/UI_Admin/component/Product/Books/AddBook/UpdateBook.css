@@ -76,4 +76,6 @@
 .imageContainer{
     display: flex;
     justify-content: center;
+    padding-left: 50px;
+    flex-direction: column;
 }
