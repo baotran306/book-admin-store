@@ -10,7 +10,7 @@ Cài đặt thư viện để chạy được react, chạy các câu lệnh sau
 ### `npm start`
 
 App sẽ mở trên 
-[http://localhost:3000](http://localhost:3000) ở trên browser của bạn.
+[http://localhost:3001](http://localhost:3001) ở trên browser của bạn.
 
 # Cài thêm các thư viện hỗ trợ ở trong chương trình
 ## npm install @progress/kendo-react-pdf
