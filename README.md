@@ -9,8 +9,8 @@ Import package necessary. Run cmd:
 
 ### `npm start`
 
-App sẽ mở trên 
-[http://localhost:3001](http://localhost:3001) ở trên browser của bạn.
+App will running on
+[http://localhost:3001](http://localhost:3001) on your browser.
 
 # Import package support:
 ## npm install @progress/kendo-react-pdf
