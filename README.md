@@ -1,18 +1,18 @@
 # Getting Started with Create React App
 
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
-Cài đặt thư viện để chạy được react, chạy các câu lệnh sau ở command line để cài đặt thư viện:
+Import package necessary. Run cmd: 
 ## npm install  
 ## npm install react-scripts --save
 ## npm audit fix --force
-# Để khởi chạy Project gõ dòng lệnh sau:
+# Start Project. Run
 
 ### `npm start`
 
 App sẽ mở trên 
 [http://localhost:3001](http://localhost:3001) ở trên browser của bạn.
 
-# Cài thêm các thư viện hỗ trợ ở trong chương trình
+# Import package support:
 ## npm install @progress/kendo-react-pdf
 ## npm install jspdf
 ## npm install html2canvas
